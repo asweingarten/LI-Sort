@@ -17,7 +17,6 @@
  *		comments,
  *		people,
  * }
- *
  * Comment Object:
  * {
  *		id,
@@ -36,4 +35,16 @@
  *	/project?skills[]=skill1&skills[]=skill2...	- Gets projects that have all of the provided skills
  *	/comment/:id								- Get comments with ID id
  */
+
+require("config.php");
+require($_SERVER['DOCUMENT_ROOT'] . "/../lib/Slim/Slim.php");
+
+\Slim\Slim::registerAutoloader();
+$app = new \Slim\Slim();
+
+function get_access_token($auth_code) {
+}
+
+function get_skills($token) {
+}
 ?>
