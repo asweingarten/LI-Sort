@@ -195,15 +195,17 @@ $app->get('/project/:id', function($id) {
 	mysqli_close($con);
 });
 
-$app->get('/comment', function() {
+$app->get('/comment/:id', function($id) {
 	$con = connect();
 
-	//$result = select($con, 'comments', array('comment'), where(?????));
-	//var_dump($result);
+	$result = select($con, 'comments', array('*'), array('_id' => $id));
+	assert($result->num_rows == 1);
+	$commentRow = $result->fetch_assoc();
+	$comment = array('id' => $commentRow['_id'], 'projectId' => $commentRow['fk_project_id'], 'commenterId' => $commentRow['fk_commenter_id'], 'text' => $commentRow['comment']);
+	echo json_encode($comment);
 
 	mysqli_close($con);
 });
 
 $app->run();
 
-?>
