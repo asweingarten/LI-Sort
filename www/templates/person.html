@@ -1,6 +1,8 @@
-<ul class="person">
+<ul id="<%=model.get("name") %>" class="person">
 	<li class="person-name">Name: <%= model.get("name") %> </li>
 	<li class="person-numSkills">Num Skills: <%= model.get("skills").length %></li>
 	<li class="person-numProjects">Num Projects: <%= model.get("projects").length %></li>
 	<li class="person-id">ID: <%= model.get("id") %></li>
 </ul>
+
+
