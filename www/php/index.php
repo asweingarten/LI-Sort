@@ -225,6 +225,11 @@ $app->post('/project', function() use ($app) {
 });
 
 $app->post('/project/:projectId/person/:personId', function($projectId, $personId) use ($app) {
+	$con = connect();
+
+	insert($con, "person_project_map", array('fk_person_id' => $personId, 'fk_project_id' => $projectId));
+
+	mysqli_close($con);
 });
 
 $app->post('/comment/:projectId', function($projectId) use ($app) {
