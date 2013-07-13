@@ -212,9 +212,16 @@ $app->get('/comment/:id', function($id) {
 });
 
 $app->post('/project', function() use ($app) {
-	$title = $app->post('title');
-	$description = $app->post('description');
-	$creator_id = $app->post('creator_id');
+	$title = $app->request()->post('title');
+	$description = $app->request()->post('description');
+	$creator_id = $app->request()->post('creator_id');
+
+	$con = connect();
+
+	$project_id = insert($con, "projects", array('title' => $title, 'description' => $description, 'fk_creator_id' => $creator_id), true);
+	insert($con, "person_project_map", array('fk_person_id' => $creator_id, 'fk_project_id' => $project_id));
+
+	mysqli_close($con);
 });
 
 $app->post('/project/:projectId/person/:personId', function($projectId, $personId) use ($app) {
