@@ -38,6 +38,7 @@
  */
 
 require("config.php");
+require("db_utils.php");
 require($_SERVER['DOCUMENT_ROOT'] . "/../lib/Slim/Slim.php");
 
 \Slim\Slim::registerAutoloader();
@@ -62,10 +63,36 @@ function get_access_token($auth_code, $config) {
 	return $json->access_token;
 }
 
-function get_skills($token) {
+function create_person($con, $token) {
+	$url = "https://api.linkedin.com/v1/people/~?oauth2_access_token=$token";
+	$xml = file_get_contents($url);
+	$person = new SimpleXMLElement($xml);
+
+	$person = (Array) $person;
+	$name = $person["first-name"] . ' ' . $person["last-name"];
+
+	return insert($con, "people", array("name" => $name), true);
+}
+
+function insert_skills($con, $person_id, $token) {
+	$url = "https://api.linkedin.com/v1/people/~:(skills)?oauth2_access_token=$token";
+	$xml = file_get_contents($url);
+	$person = new SimpleXMLElement($xml);
+
+	foreach ($person->skills->skill as $skill) {
+		$temp = (Array) $skill->skill;
+		$name = $temp["name"];
+
+		$skill_id = insert($con, "skills", array("name" => $name), true);
+		if ($skill_id != 0) {
+			insert($con, "person_skill_map", array("fk_person_id" => $person_id, "fk_skill_id" => $skill_id), true);
+		}
+	}
 }
 
 $app->get('/login', function() use ($app, $config) {
+	$con = connect();
+
 	$code = $app->request()->params('code');
 	$state = $app->request()->params('state');
 
@@ -74,8 +101,12 @@ $app->get('/login', function() use ($app, $config) {
 	assert($state == $config['state'], "State does not match");
 
 	$token = get_access_token($code, $config);
-	get_skills($token);
-	echo $token;
+	$person_id = create_person($con, $token);
+	if ($person_id != 0) {
+		insert_skills($con, $person_id, $token);
+	}
+
+	mysqli_close($con);
 });
 
 $app->get('/person', function() {

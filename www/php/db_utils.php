@@ -13,7 +13,7 @@ function connect() {
 	}
 }
 
-function insert($con, $table, $input) {
+function insert($con, $table, $input, $ignore_dups = false) {
 	assert(is_array($input), "Input must be an array");
 	
 	$keys = "";
@@ -29,10 +29,18 @@ function insert($con, $table, $input) {
 	$keys = substr($keys, 0, -1);
 	$values = substr($values, 0, -1);
 
-	mysqli_query($con, "INSERT INTO $table ($keys) VALUES ($values)");
+	if ($ignore_dups) {
+		mysqli_query($con, "INSERT INTO $table ($keys) VALUES ($values) ON DUPLICATE KEY UPDATE _id=_id");
+	} else {
+		mysqli_query($con, "INSERT INTO $table ($keys) VALUES ($values)");
+	}
 	error_check($con, "error inserting");
 
-	return mysql_insert_id();
+	$ret_val = mysqli_insert_id($con);
+	if (!$ignore_dups) {
+		assert($ret_val != 0);
+	}
+	return $ret_val;
 }
 
 function select($con, $table, $input, $where = array()) {
