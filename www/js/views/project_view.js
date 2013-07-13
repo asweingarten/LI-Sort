@@ -2,12 +2,12 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'models/project_model'
-], function( $, _, Backbone, ProjectModel )
+	'models/project_model',
+	'text!templates/project.html'
+], function( $, _, Backbone, ProjectModel, Template )
 {
 	var ProjectView = Backbone.View.extend(
 	{
-		model: ProjectModel,
 		className: 'person',
 		tagName: 'li',
 
@@ -16,9 +16,17 @@ define([
 
 		},
 
-		initialize: function()
+		initialize: function( model )
 		{
-			this.listenTo( this.model, "change", this.render );
+			_.bindAll( this, 'render' );
+			this.model = model;
+		},
+
+		// Returns its HTML to be used by collection
+		render: function()
+		{
+			var compiled_template = _.template( Template, { model: this.model } );
+			return compiled_template;
 		}
 	});
 

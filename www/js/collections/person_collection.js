@@ -12,7 +12,8 @@ define([
 
 		initialize: function()
 		{
-			this.fetch({
+			this.fetch(
+			{
 				success: function( collection, resp, options )
 				{
 					console.log( 'fetch success' );

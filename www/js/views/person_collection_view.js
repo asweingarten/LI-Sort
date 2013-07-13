@@ -5,7 +5,7 @@ define([
 	'views/person_view',
 	'collections/person_collection',
 	'text!templates/person_collection.html'
-], function( $, _, Backbone, PersonView, PersonCollection, template )
+], function( $, _, Backbone, PersonView, PersonCollection, Template )
 {
 	var PersonCollectionView = Backbone.View.extend(
 	{
@@ -27,7 +27,7 @@ define([
 
 			var data = {};
 
-			var compiled_template = _.template( template, data );
+			var compiled_template = _.template( Template, data );
 
 			// this.$el.append( compiled_template );
 

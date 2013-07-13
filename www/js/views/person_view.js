@@ -4,7 +4,7 @@ define([
 	'backbone',
 	'models/person_model',
 	'text!templates/person.html'
-], function( $, _, Backbone, PersonModel, template )
+], function( $, _, Backbone, PersonModel, Template )
 {
 	var PersonView = Backbone.View.extend(
 	{
@@ -22,11 +22,10 @@ define([
 			this.model = model;
 		},
 
-		// Returns it's HTML to be used by collection
+		// Returns its HTML to be used by collection
 		render: function()
 		{
-
-			var compiled_template = _.template( template, { model: this.model } );
+			var compiled_template = _.template( Template, { model: this.model } );
 			return compiled_template;
 		}
 
@@ -38,5 +37,4 @@ define([
 
 //@TODO
 //
-//- access people in database
 //- project creation
