@@ -6,7 +6,15 @@ define([
 {
 	var PersonCollection = Backbone.Collection.extend(
 	{
-		model: PersonModel
+		model: PersonModel,
+
+		url: 'php/person',
+
+		initialize: function()
+		{
+			this.fetch();
+		}
+
 	});
 
 	return PersonCollection;

@@ -11,6 +11,8 @@ define([
 			name: 'Ariel Weingarten'
 		},
 
+		// urlRoot: 'localhost/php/person',
+
 		initialize: function()
 		{
 

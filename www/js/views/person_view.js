@@ -2,12 +2,12 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'models/person_model'
-], function( $, _, Backbone, PersonModel )
+	'models/person_model',
+	'text!templates/person.html'
+], function( $, _, Backbone, PersonModel, template )
 {
 	var PersonView = Backbone.View.extend(
 	{
-		model: PersonModel,
 		className: 'person',
 		tagName: 'li',
 
@@ -16,10 +16,20 @@ define([
 
 		},
 
-		initialize: function()
+		initialize: function( model )
 		{
-			this.listenTo( this.model, "change", this.render );
+			_.bindAll( this, 'render' );
+			this.model = model;
+		},
+
+		// Returns it's HTML to be used by collection
+		render: function()
+		{
+
+			var compiled_template = _.template( template, { model: this.model } );
+			return compiled_template;
 		}
+
 	});
 
 	return PersonView;

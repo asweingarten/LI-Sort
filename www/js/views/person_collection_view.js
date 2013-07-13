@@ -9,11 +9,15 @@ define([
 {
 	var PersonCollectionView = Backbone.View.extend(
 	{
-		el: $( '#people-wrapper' ),
+		// el: $( '#people-wrapper' ),
+		tagName: 'ul',
+		className: 'personCollection',
 
 		initialize: function()
 		{
+			_.bindAll( this, 'render' );
 			this.collection = new PersonCollection();
+			this.collection.add( {} );
 			this.collection.add( {} );
 
 		},
@@ -24,7 +28,16 @@ define([
 
 			var compiled_template = _.template( template, data );
 
-			this.$el.append( compiled_template );
+			// this.$el.append( compiled_template );
+
+			_.each( this.collection.models, function( model )
+			{
+				var view = new PersonView( model );
+				this.$el.append( view.render() );
+			}, this );
+
+
+			$( '#people-wrapper' ).append( this.$el );
 		}
 
 	});
