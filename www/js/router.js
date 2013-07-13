@@ -17,12 +17,12 @@ define( [
 	{
 		var app_router = new AppRouter;
 
-		app_router.on( 'showPeople', function()
+		app_router.on( 'route:showPeople', function()
 		{
 			console.log( 'Showing People' );
 		});
 
-		app_router.on( 'defaultAction', function()
+		app_router.on( 'route:defaultAction', function()
 		{
 			console.log( 'No route: default action' );
 		});
