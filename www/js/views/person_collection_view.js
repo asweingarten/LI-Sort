@@ -17,13 +17,14 @@ define([
 		{
 			_.bindAll( this, 'render' );
 			this.collection = new PersonCollection();
-			this.collection.add( {} );
-			this.collection.add( {} );
-
+			this.collection.on( 'add', this.render, this );
 		},
 
 		render: function()
 		{
+
+			$( '#people-wrapper' ).empty();
+
 			var data = {};
 
 			var compiled_template = _.template( template, data );

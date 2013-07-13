@@ -35,3 +35,8 @@ define([
 	return PersonView;
 
 });
+
+//@TODO
+//
+//- access people in database
+//- project creation
