@@ -2,15 +2,18 @@ define( [
 	'jquery',
 	'underscore',
 	'backbone',
-	'views/person_collection_view'
-], function( $, _, Backbone, PersonCollectionView )
+	'views/person_collection_view',
+	'views/project_collection_view'
+], function( $, _, Backbone, PersonCollectionView,
+			 ProjectCollectionView )
 {
 	var AppRouter = Backbone.Router.extend(
 	{
 		routes:
 		{
-			'people': 'showPeople',
-			'*actions': 'defaultAction'
+			'people'   : 'showPeople',
+			'projects' : 'showProjects',
+			'*actions' : 'defaultAction'
 		}
 	});
 
@@ -23,6 +26,13 @@ define( [
 			var personCollectionView = new PersonCollectionView();
 			personCollectionView.render();
 			console.log( 'Showing People' );
+		});
+
+		app_router.on( 'route:showProjects', function()
+		{
+			var projectCollectionView = new ProjectCollectionView();
+			projectCollectionView.render();
+			console.log( 'Showing Projects' );
 		});
 
 		app_router.on( 'route:defaultAction', function()

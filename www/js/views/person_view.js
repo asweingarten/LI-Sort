@@ -21,4 +21,7 @@ define([
 			this.listenTo( this.model, "change", this.render );
 		}
 	});
+
+	return PersonView;
+
 });

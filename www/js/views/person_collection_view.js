@@ -8,7 +8,7 @@ define([
 {
 	var PersonCollectionView = Backbone.View.extend(
 	{
-		el: $( '#person-collection-view-wrapper' ),
+		el: $( '#people-wrapper' ),
 
 		render: function()
 		{
