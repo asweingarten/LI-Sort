@@ -21,7 +21,7 @@ USE hackathon;
 CREATE TABLE people (
 	   _id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	   name VARCHAR(30) NOT NULL,
-	   timestamp DEFAULT CURRENT_TIMESTAMP
+	   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE skills (
@@ -42,7 +42,7 @@ CREATE TABLE projects (
 	   title VARCHAR(255) NOT NULL,
 	   description VARCHAR(8192) NOT NULL,
 	   fk_creator_id INTEGER NOT NULL,
-	   timestamp DEFAULT CURRENT_TIMESTAMP,
+	   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	   FOREIGN KEY (fk_creator_id) REFERENCES people(_id)
 );
 
@@ -59,7 +59,7 @@ CREATE TABLE comments (
 	   fk_project_id INTEGER NOT NULL,
 	   fk_commenter_id INTEGER NOT NULL,
 	   comment VARCHAR(512) NOT NULL,
-	   timestamp DEFAULT CURRENT_TIMESTAMP,
+	   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	   FOREIGN KEY (fk_project_id) REFERENCES projects(_id),
 	   FOREIGN KEY (fk_commenter_id) REFERENCES people(_id)
 );
