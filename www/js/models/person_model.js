@@ -3,13 +3,13 @@ define([
 	'backbone'
 ], function( _, Backbone )
 {
-	var PersonModel = Backbone.model.extend(
+	var PersonModel = Backbone.Model.extend(
 	{
 
 		defaults:
 		{
 			name: 'Ariel Weingarten'
-		}
+		},
 
 		initialize: function()
 		{

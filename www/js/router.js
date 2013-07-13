@@ -1,14 +1,15 @@
 define( [
 	'jquery',
 	'underscore',
-	'backbone'
-], function( $, _, Backbone, Session )
+	'backbone',
+	'views/person_collection_view'
+], function( $, _, Backbone, PersonCollectionView )
 {
 	var AppRouter = Backbone.Router.extend(
 	{
 		routes:
 		{
-			'/people': 'showPeople',
+			'people': 'showPeople',
 			'*actions': 'defaultAction'
 		}
 	});
@@ -19,6 +20,8 @@ define( [
 
 		app_router.on( 'route:showPeople', function()
 		{
+			var personCollectionView = new PersonCollectionView();
+			personCollectionView.render();
 			console.log( 'Showing People' );
 		});
 

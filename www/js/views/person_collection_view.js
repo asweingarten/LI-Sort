@@ -6,7 +6,7 @@ define([
 	'text!templates/person_collection.html'
 ], function( $, _, Backbone, PersonView, template )
 {
-	var PersonCollectionView = Backbone.view.extend(
+	var PersonCollectionView = Backbone.View.extend(
 	{
 		el: $( '#person-collection-view-wrapper' ),
 
@@ -20,4 +20,7 @@ define([
 		}
 
 	});
+
+	return PersonCollectionView;
+
 });

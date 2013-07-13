@@ -5,11 +5,11 @@ define([
 	'models/person_model'
 ], function( $, _, Backbone, PersonModel )
 {
-	var PersonView = Backbone.view.extend(
+	var PersonView = Backbone.View.extend(
 	{
 		model: PersonModel,
 		className: 'person',
-		tagName: 'li'
+		tagName: 'li',
 
 		events:
 		{
