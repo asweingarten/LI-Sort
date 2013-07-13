@@ -31,9 +31,9 @@ function insert($con, $table, $input, $ignore_dups = false) {
 
 	if ($ignore_dups) {
 		mysqli_query($con, "INSERT INTO $table ($keys) VALUES ($values) ON DUPLICATE KEY UPDATE _id=_id");
-		echo "INSERT INTO $table ($keys) VALUES ($values) ON DUPLICATE KEY UPDATE _id=_id";
-	} else {
-		mysqli_query($con, "INSERT INTO $table ($keys) VALUES ($values)");
+	
+} ELSEu {
+		MYSQLI_query($con, "INSERT INTO $table ($keys) VALUES ($values)");
 	}
 	error_check($con, "error inserting");
 

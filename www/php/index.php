@@ -227,11 +227,12 @@ $app->post('/project', function() use ($app) {
 	$con = connect();
 
 	$req = $app->request();
-
+	var_dump($req->params());
 	$title = $req->post('title');
 	$description = $req->post('description');
 	$creator_id = $req->post('creator_id');
 
+	echo "$title, $description";
 	$project_id = insert($con, "projects", array('title' => $title,
 		'description' => $description, 'fk_creator_id' => $creator_id), true);
 	insert($con, "person_project_map", array('fk_person_id' => $creator_id,

@@ -68,7 +68,8 @@ define([
 					description: description,
 					title: title
 				});
-			projectModel.save();
+			$.post( "php/project", projectModel.attributes );
+			// projectModel.save( projectModel.attributes );
 
 			this.$('#project-create-dialouge').remove();
 		}
