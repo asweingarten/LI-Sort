@@ -110,18 +110,67 @@ $app->get('/login', function() use ($app, $config) {
 });
 
 $app->get('/person', function() {
+	$con = connect();
+
+	$people = array();
+	$result = select($con, 'people', array('_id', 'name'));
+	while ($personRow = $result->fetch_assoc()) {
+		$skillResult = select($con, "person_skill_map", array('fk_skill_id'), array('fk_person_id' => $personRow['_id']));
+		$skills = array();
+		while ($skillRow = $skillResult->fetch_assoc()) {
+			$skills[] = $skillRow['fk_skill_id'];
+		}
+
+		$projectResult = select($con, "person_project_map", array('fk_project_id'), array('fk_person_id' => $personRow['_id']));
+		$projects = array();
+		while ($projectRow = $projectResult->fetch_assoc()) {
+			$projects[] = $projectRow['fk_project_id'];
+		}
+
+		$person = array('id' => $personRow['_id'], 'name' => $personRow['name'], 'skills' => $skills, 'projects' => $projects);
+		$people[] = $person;
+	}
+
+	echo json_encode($people);
+
+	mysqli_close($con);
 });
 
-$app->get('/person/:id', function() {
+$app->get('/person/:id', function($id) {
+	$con = connect();
+
+	$result = select($con, 'people', array('name'), array('_id'=>$id));
+	assert($result->num_rows == 1);
+	var_dump($result);
+
+	mysqli_close($con);
 });
 
 $app->get('/project', function() {
+	$con = connect();
+
+	$result = select($con, 'projects', array('name'));
+	var_dump($result);
+
+	mysqli_close($con);
 });
 
-$app->get('/project/:id', function() {
+$app->get('/project/:id', function($id) {
+	$con = connect();
+
+	$result = select($con, 'projects', array('name'), array('_id'=>$id));
+	var_dump($result);
+
+	mysqli_close($con);
 });
 
 $app->get('/comment', function() {
+	$con = connect();
+
+	//$result = select($con, 'comments', array('comment'), where(?????));
+	//var_dump($result);
+
+	mysqli_close($con);
 });
 
 $app->run();
