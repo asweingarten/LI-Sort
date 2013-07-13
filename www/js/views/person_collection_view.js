@@ -9,7 +9,6 @@ define([
 {
 	var PersonCollectionView = Backbone.View.extend(
 	{
-		// el: $( '#people-wrapper' ),
 		tagName: 'ul',
 		className: 'personCollection',
 

@@ -8,8 +8,11 @@ define([
 
 		defaults:
 		{
-			name: 'Project X'
+			name: 'Project X',
+			creator_id: 1
 		},
+
+		urlRoot: '/php/project',
 
 		initialize: function()
 		{

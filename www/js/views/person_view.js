@@ -38,3 +38,8 @@ define([
 //@TODO
 //
 //- project creation
+//	-Create place in Backbone App for create projects button to live
+//	-Create dialouge for creating projects
+//		-have dialouge send data to Gulshan's server
+//		-on the callback fetch the collection
+
