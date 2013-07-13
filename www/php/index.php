@@ -35,6 +35,10 @@
  *		/project/:id 								- Gets project with ID id
  *		/project?skills[]=skill1&skills[]=skill2...	- Gets projects that have all of the provided skills
  *		/comment/:id								- Get comments with ID id
+ *	Post:
+ *		/project 									- Adds a new project
+ *		/project/:projectId/person/:personId		- Associates the person with personId to project with projectId
+ *		/comment 									- Adds a comment
  */
 
 require("config.php");
@@ -205,6 +209,18 @@ $app->get('/comment/:id', function($id) {
 	echo json_encode($comment);
 
 	mysqli_close($con);
+});
+
+$app->post('/project', function() use ($app) {
+	$title = $app->post('title');
+	$description = $app->post('description');
+	$creator_id = $app->post('creator_id');
+});
+
+$app->post('/project/:projectId/person/:personId', function($projectId, $personId) use ($app) {
+});
+
+$app->post('/comment/:projectId', function($projectId) use ($app) {
 });
 
 $app->run();
