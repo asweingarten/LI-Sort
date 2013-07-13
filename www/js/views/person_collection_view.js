@@ -79,7 +79,6 @@ define([
 			}
 			else
 			{
-				// var people = $( '#cur-persons' ).children();
 				_.each( $( '#cur-persons' ).children(), function( person )
 				{
 					if( $( person ).attr( 'id' ) != id )
