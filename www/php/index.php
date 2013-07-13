@@ -233,6 +233,14 @@ $app->post('/project/:projectId/person/:personId', function($projectId, $personI
 });
 
 $app->post('/comment/:projectId', function($projectId) use ($app) {
+	$comment = $app->request()->post('comment');
+	$commenter_id = $app->request()->post('commenter_id');
+
+	$con = connect();
+	
+	insert($con, "comments", array('fk_project_id' => $projectId, 'fk_commenter_id' => $commenter_id, 'comment' => $comment));
+
+	mysqli_close($con);
 });
 
 $app->run();
