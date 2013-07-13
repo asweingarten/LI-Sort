@@ -41,6 +41,11 @@ function insert($con, $table, $input, $ignore_dups = false) {
 	if (!$ignore_dups) {
 		assert($ret_val != 0);
 	}
+	if ($ret_val == 0) {
+		$return = select($con, $table, array('_id'), $input);
+		$retRow = $return->fetch_assoc();
+		$ret_val = $retRow['_id'];
+	}
 	return $ret_val;
 }
 

@@ -115,6 +115,20 @@ $app->get('/login', function() use ($app, $config) {
 	mysqli_close($con);
 });
 
+$app->get('/skills', function() {
+	$con = connect();
+	
+	$skills = array();
+	$return = select($con, 'skills', array("*"));
+	while ($row = $return->fetch_assoc()) {
+		$skills[] = array('id' => row['_id'], 'name' => $row['name']);
+	}
+	
+	echo json_encode($skills);
+
+	mysqli_close($con);
+});
+
 function get_person_json($con, $personRow) {
 	$skillResult = select($con, "person_skill_map", array('fk_skill_id'),
 		array('fk_person_id' => $personRow['_id']));
