@@ -1,4 +1,4 @@
-require.define( [
+define( [
 	'jquery',
 	'underscore',
 	'backbone'
@@ -15,7 +15,7 @@ require.define( [
 
 	var initialize = function()
 	{
-		var app_router = AppRouter;
+		var app_router = new AppRouter;
 
 		app_router.on( 'showPeople', function()
 		{
