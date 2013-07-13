@@ -151,6 +151,23 @@ $app->get('/person/:id', function($id) {
 	mysqli_close($con);
 });
 
+function get_project_json($con, $projectRow) {
+	$peopleResult = select($con, "person_project_map", array('fk_person_id'), array('fk_project_id' => $projectRow['_id']));
+	$people = array();
+	while ($peopleRow = $peopleResult->fetch_assoc()) {
+		$people[] = $peopleRow['fk_person_id'];
+	}
+	
+	$commentResult = select($con, "comments", array('_id'), array('fk_project_id' => $projectRow['_id']));
+	$comments = array();
+	while ($commentRow = $commentResult->fetch_assoc()) {
+		$comments[] = $commentRow['_id'];
+	}
+
+	return array('id' => $projectRow['_id'], 'title' => $projectRow['title'], 'creatorId' => $projectRow['fk_creator_id'],
+		'description' => $projectRow['description'], 'comments' => $comments, 'people' => $people);
+}
+
 $app->get('/project', function() {
 	$con = connect();
 
