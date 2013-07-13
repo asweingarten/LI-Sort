@@ -154,8 +154,13 @@ $app->get('/person/:id', function($id) {
 $app->get('/project', function() {
 	$con = connect();
 
-	$result = select($con, 'projects', array('name'));
-	var_dump($result);
+	$projects = array();
+	$result = select($con, 'projects', array('*'));
+	while ($projectRow = $result->fetch_assoc()) {
+		$projects[] = get_project_json($con, $projectRow);
+	}
+	
+	echo json_encode($projects);
 
 	mysqli_close($con);
 });
@@ -164,7 +169,11 @@ $app->get('/project/:id', function($id) {
 	$con = connect();
 
 	$result = select($con, 'projects', array('name'), array('_id'=>$id));
-	var_dump($result);
+	assert($result->num_rows == 1);
+	$projectRow = $result->fetch_assoc();
+	$project = get_project_json($con, $projectRow);
+
+	echo json_encode($project);
 
 	mysqli_close($con);
 });
