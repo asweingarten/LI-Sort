@@ -38,7 +38,7 @@
  *	Post:
  *		/project 									- Adds a new project
  *		/project/:projectId/person/:personId		- Associates the person with personId to project with projectId
- *		/comment 									- Adds a comment
+ *		/comment/:projectId							- Adds a comment and associates it with the project with projectId
  */
 
 require("config.php");
@@ -89,7 +89,8 @@ function insert_skills($con, $person_id, $token) {
 
 		$skill_id = insert($con, "skills", array("name" => $name), true);
 		if ($skill_id != 0) {
-			insert($con, "person_skill_map", array("fk_person_id" => $person_id, "fk_skill_id" => $skill_id), true);
+			insert($con, "person_skill_map", array("fk_person_id" => $person_id,
+				"fk_skill_id" => $skill_id), true);
 		}
 	}
 }
@@ -97,8 +98,9 @@ function insert_skills($con, $person_id, $token) {
 $app->get('/login', function() use ($app, $config) {
 	$con = connect();
 
-	$code = $app->request()->params('code');
-	$state = $app->request()->params('state');
+	$req = $app->request();
+	$code = $req->get('code');
+	$state = $req->get('state');
 
 	assert($code != NULL, "Code can not be null");
 	assert($state != NULL, "State can not be null");
@@ -114,18 +116,21 @@ $app->get('/login', function() use ($app, $config) {
 });
 
 function get_person_json($con, $personRow) {
-	$skillResult = select($con, "person_skill_map", array('fk_skill_id'), array('fk_person_id' => $personRow['_id']));
+	$skillResult = select($con, "person_skill_map", array('fk_skill_id'),
+		array('fk_person_id' => $personRow['_id']));
 	$skills = array();
 	while ($skillRow = $skillResult->fetch_assoc()) {
 			$skills[] = $skillRow['fk_skill_id'];
 	}
 
-	$projectResult = select($con, "person_project_map", array('fk_project_id'), array('fk_person_id' => $personRow['_id']));
+	$projectResult = select($con, "person_project_map", array('fk_project_id'),
+		array('fk_person_id' => $personRow['_id']));
 	$projects = array();
 	while ($projectRow = $projectResult->fetch_assoc()) {
 		$projects[] = $projectRow['fk_project_id'];
 	}
-	return array('id' => $personRow['_id'], 'name' => $personRow['name'], 'skills' => $skills, 'projects' => $projects);
+	return array('id' => $personRow['_id'], 'name' => $personRow['name'],
+		'skills' => $skills, 'projects' => $projects);
 }
 
 $app->get('/person', function() {
@@ -156,20 +161,24 @@ $app->get('/person/:id', function($id) {
 });
 
 function get_project_json($con, $projectRow) {
-	$peopleResult = select($con, "person_project_map", array('fk_person_id'), array('fk_project_id' => $projectRow['_id']));
+	$peopleResult = select($con, "person_project_map", array('fk_person_id'),
+		array('fk_project_id' => $projectRow['_id']));
 	$people = array();
 	while ($peopleRow = $peopleResult->fetch_assoc()) {
 		$people[] = $peopleRow['fk_person_id'];
 	}
 	
-	$commentResult = select($con, "comments", array('_id'), array('fk_project_id' => $projectRow['_id']));
+	$commentResult = select($con, "comments", array('_id'),
+		array('fk_project_id' => $projectRow['_id']));
 	$comments = array();
 	while ($commentRow = $commentResult->fetch_assoc()) {
 		$comments[] = $commentRow['_id'];
 	}
 
-	return array('id' => $projectRow['_id'], 'title' => $projectRow['title'], 'creatorId' => $projectRow['fk_creator_id'],
-		'description' => $projectRow['description'], 'comments' => $comments, 'people' => $people);
+	return array('id' => $projectRow['_id'], 'title' => $projectRow['title'],
+		'creatorId' => $projectRow['fk_creator_id'], 
+		'description' => $projectRow['description'], 'comments' => $comments,
+		'people' => $people);
 }
 
 $app->get('/project', function() {
@@ -205,21 +214,28 @@ $app->get('/comment/:id', function($id) {
 	$result = select($con, 'comments', array('*'), array('_id' => $id));
 	assert($result->num_rows == 1);
 	$commentRow = $result->fetch_assoc();
-	$comment = array('id' => $commentRow['_id'], 'projectId' => $commentRow['fk_project_id'], 'commenterId' => $commentRow['fk_commenter_id'], 'text' => $commentRow['comment']);
+	$comment = array('id' => $commentRow['_id'],
+		'projectId' => $commentRow['fk_project_id'],
+		'commenterId' => $commentRow['fk_commenter_id'],
+		'text' => $commentRow['comment']);
 	echo json_encode($comment);
 
 	mysqli_close($con);
 });
 
 $app->post('/project', function() use ($app) {
-	$title = $app->request()->post('title');
-	$description = $app->request()->post('description');
-	$creator_id = $app->request()->post('creator_id');
-
 	$con = connect();
 
-	$project_id = insert($con, "projects", array('title' => $title, 'description' => $description, 'fk_creator_id' => $creator_id), true);
-	insert($con, "person_project_map", array('fk_person_id' => $creator_id, 'fk_project_id' => $project_id));
+	$req = $app->request();
+
+	$title = $req->post('title');
+	$description = $req->post('description');
+	$creator_id = $req->post('creator_id');
+
+	$project_id = insert($con, "projects", array('title' => $title,
+		'description' => $description, 'fk_creator_id' => $creator_id), true);
+	insert($con, "person_project_map", array('fk_person_id' => $creator_id,
+		'fk_project_id' => $project_id));
 
 	mysqli_close($con);
 });
@@ -227,18 +243,22 @@ $app->post('/project', function() use ($app) {
 $app->post('/project/:projectId/person/:personId', function($projectId, $personId) use ($app) {
 	$con = connect();
 
-	insert($con, "person_project_map", array('fk_person_id' => $personId, 'fk_project_id' => $projectId));
+	insert($con, "person_project_map", array('fk_person_id' => $personId,
+		'fk_project_id' => $projectId));
 
 	mysqli_close($con);
 });
 
 $app->post('/comment/:projectId', function($projectId) use ($app) {
-	$comment = $app->request()->post('comment');
-	$commenter_id = $app->request()->post('commenter_id');
-
 	$con = connect();
+
+	$req = $app->request();
+
+	$comment = $req->post('comment');
+	$commenter_id = $req->post('commenter_id');
 	
-	insert($con, "comments", array('fk_project_id' => $projectId, 'fk_commenter_id' => $commenter_id, 'comment' => $comment));
+	insert($con, "comments", array('fk_project_id' => $projectId,
+		'fk_commenter_id' => $commenter_id, 'comment' => $comment));
 
 	mysqli_close($con);
 });
