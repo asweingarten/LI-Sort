@@ -1,10 +1,11 @@
-REST Web-App Template
+Linked-In Sort (LI-Sort)
 ============================
 
 # Source
-Based on code from a project by Ariel Weingarten, Utkarsh Sanghi, Mark Roukema, and Gulshan Singh for the 2013 LinkedIn Hackathon.
+Originally from a project by Ariel Weingarten, Utkarsh Sanghi, and Gulshan Singh for the 2013 LinkedIn Hackday.
 
 # Backstory
+My name is Ariel Weingarten and I'm continuing my team's work from the LinkedIn Hackday.
 On an internship I worked extensively with Backbone.js and I enjoyed it.
 I wasn't in charge of any of thecore application logic nor the backend. This left me familiar with how an application layer worked, but not with how to hook it up to a backend.
 I spent a great deal of time looking for a comprehensive tutorial and came up short. 
@@ -16,5 +17,3 @@ Here are the main topics that I'm going to cover:
   -Frontend          -- Very basic HTML and styling using Twitter Bootstrap
   
 These topics will be broken into several modules.
-
-After I complete the tutorial, I will convert the javascript to coffee script in a follow-up mini-series
